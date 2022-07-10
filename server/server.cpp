@@ -54,5 +54,7 @@ void Server::onReadyRead()
 
 void Server::onDisconect()
 {
-    sockets.erase((QTcpSocket*)sender());
+    auto socket = (QTcpSocket*)sender();
+    sockets.erase(socket);
+    socket->deleteLater();
 }
