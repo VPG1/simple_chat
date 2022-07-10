@@ -15,9 +15,11 @@ private:
     std::vector<QTcpSocket *> sockets;  
     
     void sendToClient(const QString &message);
-    
+
+protected:
+    void incomingConnection(qintptr socketDescriptor) override;
+
 public slots:
-    void incomingConection(qintptr socketDescriptor);
     void onReadyRead();
 };
 

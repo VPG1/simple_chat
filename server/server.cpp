@@ -13,10 +13,18 @@ Server::Server(int port, QObject *parent)
 
 void Server::sendToClient(const QString &message)
 {
+    QByteArray data;
+    data.clear();
+    QDataStream out(&data, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_6_2);
+    out << message;
 
+    for(int i = 0; i < sockets.size(); ++i){
+        sockets[i]->write(data);
+    }
 }
 
-void Server::incomingConection(qintptr socketDescriptor)
+void Server::incomingConnection(qintptr socketDescriptor)
 {
     auto socket = new QTcpSocket;
     socket->setSocketDescriptor(socketDescriptor);
@@ -37,6 +45,7 @@ void Server::onReadyRead()
         QString str;
         in >> str;
         qDebug() << str;
+        sendToClient(str);
     }
     else{
         qDebug() << "data stream error";
