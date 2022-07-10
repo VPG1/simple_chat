@@ -4,6 +4,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <vector>
+#include <set>
 
 class Server : public QTcpServer
 {
@@ -12,7 +13,7 @@ public:
     Server(int port = 2323, QObject *parent = nullptr);
     
 private:
-    std::vector<QTcpSocket *> sockets;  
+    std::set<QTcpSocket *> sockets;
     
     void sendToClient(const QString &message);
 
@@ -21,6 +22,7 @@ protected:
 
 public slots:
     void onReadyRead();
+    void onDisconect();
 };
 
 #endif // SERVER_H

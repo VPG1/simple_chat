@@ -19,8 +19,8 @@ void Server::sendToClient(const QString &message)
     out.setVersion(QDataStream::Qt_6_2);
     out << message;
 
-    for(int i = 0; i < sockets.size(); ++i){
-        sockets[i]->write(data);
+    for(auto &socket : sockets){
+        socket->write(data);
     }
 }
 
@@ -29,9 +29,9 @@ void Server::incomingConnection(qintptr socketDescriptor)
     auto socket = new QTcpSocket;
     socket->setSocketDescriptor(socketDescriptor);
     connect(socket, &QTcpSocket::readyRead, this, &Server::onReadyRead);
-    connect(socket, &QTcpSocket::disconnected, socket, &QTcpSocket::deleteLater);
+    connect(socket, &QTcpSocket::disconnected, this, &Server::onDisconect);
 
-    sockets.push_back(socket);
+    sockets.insert(socket);
     qDebug() << "client connected: " << socketDescriptor;
 }
 
@@ -50,4 +50,9 @@ void Server::onReadyRead()
     else{
         qDebug() << "data stream error";
     }
+}
+
+void Server::onDisconect()
+{
+    sockets.erase((QTcpSocket*)sender());
 }
