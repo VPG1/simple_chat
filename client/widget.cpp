@@ -47,11 +47,13 @@ void Widget::onReadyRead()
 void Widget::on_pushButton_clicked()
 {
     sendToServer(ui->lineEdit->text());
+    ui->lineEdit->clear();
 }
 
 
 void Widget::on_lineEdit_returnPressed()
 {
     sendToServer(ui->lineEdit->text());
+    ui->lineEdit->clear();
 }
 
