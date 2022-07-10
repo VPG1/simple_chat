@@ -2,6 +2,8 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QTcpSocket>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -17,5 +19,15 @@ public:
 
 private:
     Ui::Widget *ui;
-};
+    QTcpSocket *socket;
+
+    void sendToServer(const QString &message);
+
+public slots:
+    void onReadyRead();
+
+private slots:
+    void on_pushButton_clicked();
+    void on_lineEdit_returnPressed();
+ };
 #endif // WIDGET_H
