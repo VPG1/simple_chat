@@ -5,6 +5,9 @@
 #include <QTcpSocket>
 #include <vector>
 #include <set>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonParseError>
 
 class Server : public QTcpServer
 {
@@ -15,7 +18,7 @@ public:
 private:
     std::set<QTcpSocket *> sockets;
     
-    void sendToClient(const QString &message);
+    void sendToClient(const QByteArray &message);
 
 protected:
     void incomingConnection(qintptr socketDescriptor) override;

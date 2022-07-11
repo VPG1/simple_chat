@@ -11,7 +11,7 @@ Server::Server(int port, QObject *parent)
     }
 }
 
-void Server::sendToClient(const QString &message)
+void Server::sendToClient(const QByteArray &message)
 {
     QByteArray data;
     data.clear();
@@ -41,8 +41,7 @@ void Server::onReadyRead()
     QDataStream in(socket);
     in.setVersion(QDataStream::Qt_6_2);
     if(in.status() == QDataStream::Ok){
-        qDebug() << "read..";
-        QString str;
+        QByteArray str;
         in >> str;
         qDebug() << str;
         sendToClient(str);
@@ -55,6 +54,7 @@ void Server::onReadyRead()
 void Server::onDisconect()
 {
     auto socket = (QTcpSocket*)sender();
+    qDebug() << "client dis fconnected: " << socket->socketDescriptor();
     sockets.erase(socket);
     socket->deleteLater();
 }
